@@ -1,5 +1,5 @@
-function App() {
-  return <>Hello world</>;
-}
+import Home from './pages/Home';
 
-export default App;
+export default function App() {
+  return <Home />;
+}
