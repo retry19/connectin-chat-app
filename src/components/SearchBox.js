@@ -3,6 +3,7 @@ import { Search } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   search: {
+    marginTop: theme.spacing(1),
     position: 'relative',
     borderRadius: 30,
     backgroundColor: theme.palette.grey['100'],
@@ -11,8 +12,6 @@ const useStyles = makeStyles((theme) => ({
     },
     height: '45px',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      marginRight: theme.spacing(3),
       width: 'auto',
     },
   },

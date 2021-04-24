@@ -19,7 +19,7 @@ function Navbar() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static" color="transparent" elevation="0">
+    <AppBar position="static" color="inherit" elevation={0}>
       <Container maxWidth="sm">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>

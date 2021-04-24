@@ -1,3 +1,4 @@
+import ChatList from '../components/ChatList';
 import Navbar from '../components/Navbar';
 import SearchBox from '../components/SearchBox';
 
@@ -7,6 +8,8 @@ export default function Home() {
       <Navbar />
 
       <SearchBox />
+
+      <ChatList />
     </div>
   );
 }
