@@ -19,7 +19,7 @@ function Navbar() {
   const classes = useStyles();
 
   return (
-    <AppBar position="static" color="primary" elevation={0}>
+    <AppBar position="sticky" color="primary" elevation={0}>
       <Container maxWidth="sm">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
