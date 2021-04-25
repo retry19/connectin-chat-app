@@ -1,9 +1,12 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Search from './pages/Search';
+import {
+  Home,
+  Login,
+  PrivateChat,
+  Register,
+  Search
+} from './pages';
 
 const theme = createMuiTheme({
   palette: {
@@ -31,6 +34,7 @@ export default function App() {
           <Route path="/search" component={Search} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/chat" component={PrivateChat} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

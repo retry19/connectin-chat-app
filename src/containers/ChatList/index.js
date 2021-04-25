@@ -1,5 +1,5 @@
 import { List } from '@material-ui/core';
-import ChatItem from '../../components/ChatItem';
+import { ChatItem } from '../../components';
 
 function ChatList() {
   return (

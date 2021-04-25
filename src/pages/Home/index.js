@@ -1,7 +1,12 @@
-import { Box, Container, Fab, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Container,
+  Fab,
+  makeStyles
+} from '@material-ui/core';
 import { Add } from '@material-ui/icons';
-import Navbar from '../../components/Navbar';
-import ChatList from '../../containers/ChatList';
+import { Navbar } from '../../components';
+import { ChatList } from '../../containers';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {

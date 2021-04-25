@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { Lock } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
-import Copyright from '../../components/Copyright';
+import { Copyright } from '../../components';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
