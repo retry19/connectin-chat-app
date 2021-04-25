@@ -1,5 +1,5 @@
-import { Box, Container, makeStyles } from '@material-ui/core';
-import Navbar from '../components/Navbar';
+import { Box, Container, InputBase, makeStyles } from '@material-ui/core';
+import NavbarBack from '../components/NavbarBack';
 import ChatList from '../containers/ChatList';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,13 +22,24 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(2),
     position: 'absolute',
   },
+  inputSearch: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  }
 }));
 
 function Search() {
   const classes = useStyles();
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
-      <Navbar type="search" />
+      <NavbarBack link="/">
+        <InputBase
+          className={classes.inputSearch}
+          placeholder="Search"
+          inputProps={{ 'aria-label': 'search' }}
+          autoFocus="on"
+        />
+      </NavbarBack>
       <Container maxWidth="sm" className={classes.container}>
         <Box className={classes.content}>
           <ChatList />

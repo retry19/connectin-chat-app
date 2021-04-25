@@ -4,7 +4,6 @@ import {
   Container,
   Divider,
   IconButton,
-  InputBase,
   List,
   ListItem,
   ListItemIcon,
@@ -14,10 +13,9 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { ArrowBack, ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
-import PropTypes from 'prop-types';
+import { ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
 import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -41,15 +39,10 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
     marginBottom: theme.spacing(2)
   },
-  inputSearch: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  }
 }));
 
-function Navbar({ type }) {
+function Navbar() {
   const classes = useStyles();
-  const history = useHistory();
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
 
   const toggleDrawer = (isOpen) => (event) => {
@@ -95,26 +88,6 @@ function Navbar({ type }) {
     );
   }
 
-  if (type === 'search') {
-    return (
-      <AppBar position="sticky" color="inherit" elevation={0} style={{ borderBottom: '1px solid rgb(232, 232, 232)' }}>
-        <Container maxWidth="sm">
-          <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="back" onClick={() => history.push('/')}>
-              <ArrowBack />
-            </IconButton>
-            <InputBase
-              className={classes.inputSearch}
-              placeholder="Search"
-              inputProps={{ 'aria-label': 'search' }}
-              autoFocus="on"
-            />
-          </Toolbar>
-        </Container>
-      </AppBar>
-    );
-  }
-
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
       <Container maxWidth="sm">
@@ -143,9 +116,5 @@ function Navbar({ type }) {
     </AppBar>
   );
 }
-
-Navbar.propTypes = {
-  type: PropTypes.string.isRequired,
-};
 
 export default Navbar;
