@@ -37,7 +37,7 @@ function Search() {
   const classes = useStyles();
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
-      <NavbarBack link="/">
+      <NavbarBack color="inherit" link="/">
         <InputBase
           className={classes.inputSearch}
           placeholder="Search"

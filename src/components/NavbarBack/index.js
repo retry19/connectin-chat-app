@@ -18,11 +18,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function NavbarBack({ title, children, link }) {
+function NavbarBack({ title, children, link, color }) {
   const classes = useStyles();
   const history = useHistory();
   return (
-    <AppBar position="sticky" color={title ? 'primary' : 'inherit'} elevation={0} style={{ borderBottom: '1px solid rgb(232, 232, 232)' }}>
+    <AppBar position="sticky" color={color || 'primary'} elevation={0} style={{ borderBottom: '1px solid rgb(232, 232, 232)' }}>
       <Container maxWidth="sm">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="back" onClick={() => history.push(link)}>
@@ -43,6 +43,7 @@ NavbarBack.propTypes = {
   title: PropTypes.string,
   children: PropTypes.element,
   link: PropTypes.string.isRequired,
+  color: PropTypes.string,
 };
 
 export default NavbarBack;
