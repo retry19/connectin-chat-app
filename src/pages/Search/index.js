@@ -1,6 +1,6 @@
 import { Box, Container, InputBase, makeStyles } from '@material-ui/core';
-import NavbarBack from '../components/NavbarBack';
-import ChatList from '../containers/ChatList';
+import NavbarBack from '../../components/NavbarBack';
+import ChatList from '../../containers/ChatList';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
