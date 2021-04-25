@@ -1,5 +1,4 @@
-import { Box, Container, Fab, makeStyles } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Box, Container, makeStyles } from '@material-ui/core';
 import ChatList from '../components/ChatList';
 import Navbar from '../components/Navbar';
 
@@ -25,19 +24,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home() {
+function Search() {
   const classes = useStyles();
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
-      <Navbar type="home" />
+      <Navbar type="search" />
       <Container maxWidth="sm" className={classes.container}>
         <Box className={classes.content}>
           <ChatList />
-          <Fab aria-label="New Chat" className={classes.fab} color="primary">
-            <Add />
-          </Fab>
         </Box>
       </Container>
     </Box>
   );
 }
+
+export default Search;

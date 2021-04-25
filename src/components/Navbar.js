@@ -4,6 +4,7 @@ import {
   Container,
   Divider,
   IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemIcon,
@@ -13,8 +14,10 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
+import { ArrowBack, ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
+import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -38,10 +41,15 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
     marginBottom: theme.spacing(2)
   },
+  inputSearch: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  }
 }));
 
-function Navbar() {
+function Navbar({ type }) {
   const classes = useStyles();
+  const history = useHistory();
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
 
   const toggleDrawer = (isOpen) => (event) => {
@@ -87,6 +95,26 @@ function Navbar() {
     );
   }
 
+  if (type === 'search') {
+    return (
+      <AppBar position="sticky" color="inherit" elevation={0} style={{ borderBottom: '1px solid rgb(232, 232, 232)' }}>
+        <Container maxWidth="sm">
+          <Toolbar>
+            <IconButton edge="start" color="inherit" aria-label="back" onClick={() => history.push('/')}>
+              <ArrowBack />
+            </IconButton>
+            <InputBase
+              className={classes.inputSearch}
+              placeholder="Search"
+              inputProps={{ 'aria-label': 'search' }}
+              autoFocus="on"
+            />
+          </Toolbar>
+        </Container>
+      </AppBar>
+    );
+  }
+
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
       <Container maxWidth="sm">
@@ -97,9 +125,11 @@ function Navbar() {
           <Typography variant="h6" className={classes.title}>
             Connect-in
           </Typography>
-          <IconButton edge="end" color="inherit" aria-label="search">
-            <Search />
-          </IconButton>
+          <Link to="/search">
+            <IconButton edge="end" color="inherit" aria-label="search">
+              <Search htmlColor="#ffffff" />
+            </IconButton>
+          </Link>
         </Toolbar>
         <SwipeableDrawer
           anchor="left"
@@ -113,5 +143,9 @@ function Navbar() {
     </AppBar>
   );
 }
+
+Navbar.propTypes = {
+  type: PropTypes.string.isRequired,
+};
 
 export default Navbar;
