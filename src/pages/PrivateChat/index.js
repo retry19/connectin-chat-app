@@ -12,7 +12,7 @@ import {
 import { MoreVert } from '@material-ui/icons';
 import { NavbarBack } from '../../components';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   backgroundGray: {
     backgroundColor: '#f7f7f7'
   },
@@ -21,16 +21,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#f0f0f0'
   },
   container: {
-    backgroundColor: 'none',
-    [theme.breakpoints.down('600')]: {
-      backgroundColor: '#ffffff'
-    }
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   content: {
     backgroundColor: '#ffffff',
     position: 'relative',
     minHeight: '90vh',
   },
+  noPadding: {
+    padding: 0
+  }
 }));
 
 function PrivateChat() {
@@ -38,7 +39,7 @@ function PrivateChat() {
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
       <NavbarBack link="/">
-        <ListItem alignItems="flex-start">
+        <ListItem alignItems="flex-start" className={classes.noPadding}>
           <ListItemAvatar>
             <Avatar alt="Bambang Susatno" src="/" />
           </ListItemAvatar>
@@ -60,7 +61,7 @@ function PrivateChat() {
         </IconButton>
       </NavbarBack>
 
-      <Container maxWidth="sm" className={classes.container}>
+      <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content} />
       </Container>
     </Box>

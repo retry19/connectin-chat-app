@@ -15,6 +15,10 @@ const useStyles = makeStyles(() => ({
   title: {
     flexGrow: 1,
     fontWeight: 'bolder',
+  },
+  container: {
+    paddingRight: 0,
+    paddingLeft: 0,
   }
 }));
 
@@ -23,7 +27,7 @@ function NavbarBack({ title, children, link, color }) {
   const history = useHistory();
   return (
     <AppBar position="sticky" color={color || 'primary'} elevation={0} style={{ borderBottom: '1px solid rgb(232, 232, 232)' }}>
-      <Container maxWidth="sm">
+      <Container maxWidth="xs" className={classes.container}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="back" onClick={() => history.push(link)}>
             <ArrowBack />

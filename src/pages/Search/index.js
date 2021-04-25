@@ -12,10 +12,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#f7f7f7',
   },
   container: {
-    backgroundColor: 'none',
-    [theme.breakpoints.down('600')]: {
-      backgroundColor: '#ffffff'
-    }
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   content: {
     backgroundColor: '#ffffff',
@@ -45,7 +43,7 @@ function Search() {
           autoFocus="on"
         />
       </NavbarBack>
-      <Container maxWidth="sm" className={classes.container}>
+      <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content}>
           <ChatList />
         </Box>

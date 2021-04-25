@@ -13,10 +13,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#f7f7f7',
   },
   container: {
-    backgroundColor: 'none',
-    [theme.breakpoints.down('600')]: {
-      backgroundColor: '#ffffff'
-    }
+    backgroundColor: '#ffffff',
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   content: {
     backgroundColor: '#ffffff',
@@ -35,7 +34,7 @@ export default function Home() {
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
       <Navbar type="home" />
-      <Container maxWidth="sm" className={classes.container}>
+      <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content}>
           <ChatList />
           <Fab aria-label="New Chat" className={classes.fab} color="primary">

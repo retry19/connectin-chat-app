@@ -1,9 +1,17 @@
-import { List } from '@material-ui/core';
+import { List, makeStyles } from '@material-ui/core';
 import { ChatItem } from '../../components';
 
+const useStyles = makeStyles(() => ({
+  zeroPadding: {
+    padding: 0
+  }
+}));
+
 function ChatList() {
+  const classes = useStyles();
+
   return (
-    <List>
+    <List className={classes.zeroPadding}>
       <ChatItem
         sender="Bambang Susatno"
         description="I'll be in your neighborhood doing errands this"

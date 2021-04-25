@@ -18,6 +18,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingRight: 0,
+    paddingLeft: 0,
+  },
   title: {
     flexGrow: 1,
     fontWeight: 'bolder',
@@ -90,7 +94,7 @@ function Navbar() {
 
   return (
     <AppBar position="sticky" color="primary" elevation={0}>
-      <Container maxWidth="sm">
+      <Container maxWidth="xs" className={classes.container}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
             <Menu />
