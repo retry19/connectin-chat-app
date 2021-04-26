@@ -7,9 +7,9 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <Auth0Provider
-    domain="connectin-chat-app.au.auth0.com"
-    clientId="CxPByFvRGan4dqjY13RWEVkP0IhrYxTI"
-    redirectUri="http://localhost:3000"
+    domain={process.env.REACT_APP_AUTH_DOMAIN}
+    clientId={process.env.REACT_APP_AUTH_CLIENTID}
+    redirectUri={process.env.REACT_APP_BASE_URL}
     scope="read:current_user update:current_user_metadata"
   >
     <App />
