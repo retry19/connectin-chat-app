@@ -22,6 +22,9 @@ const theme = createMuiTheme({
       dark: '#005662',
       contrastText: '#ffffff'
     }
+  },
+  typography: {
+    fontFamily: 'Poppins'
   }
 });
 
