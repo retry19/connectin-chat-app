@@ -6,7 +6,8 @@ import {
   NewChat,
   PrivateChat,
   Register,
-  Search
+  Search,
+  Settings,
 } from './pages';
 
 const theme = createMuiTheme({
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="/register" component={Register} />
           <Route path="/chat" exact component={PrivateChat} />
           <Route path="/chat/new" component={NewChat} />
+          <Route path="/settings" component={Settings} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

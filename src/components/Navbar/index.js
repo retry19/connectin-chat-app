@@ -27,10 +27,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bolder',
   },
   list: {
-    width: 250,
-    [theme.breakpoints.down('600')]: {
-      width: 300
-    }
+    width: 300
   },
   drawerHeading: {
     padding: theme.spacing(2)
@@ -43,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(10),
     marginBottom: theme.spacing(2)
   },
+  listLink: {
+    color: '#5f2727',
+    textDecoration: 'none !important'
+  }
 }));
 
 function Navbar() {
@@ -72,10 +73,12 @@ function Navbar() {
         </div>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon><Settings /></ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
+          <Link to="/settings" className={classes.listLink}>
+            <ListItem button>
+              <ListItemIcon><Settings /></ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+          </Link>
           <ListItem button>
             <ListItemIcon><ExitToApp /></ListItemIcon>
             <ListItemText primary="Logout" />

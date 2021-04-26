@@ -12,9 +12,8 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
-  title: {
-    flexGrow: 1,
-    fontWeight: 'bolder',
+  flexGrow: {
+    flexGrow: 1
   },
   container: {
     paddingRight: 0,
@@ -33,7 +32,7 @@ function NavbarBack({ title, children, link, color }) {
             <ArrowBack />
           </IconButton>
           { title ? (
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" className={classes.flexGrow}>
               {title}
             </Typography>
           ) : children }

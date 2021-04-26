@@ -4,6 +4,7 @@ import PrivateChat from './PrivateChat';
 import Register from './Register';
 import Search from './Search';
 import NewChat from './NewChat';
+import Settings from './Settings';
 
 export {
   Home,
@@ -12,4 +13,5 @@ export {
   Register,
   Search,
   NewChat,
+  Settings,
 };
