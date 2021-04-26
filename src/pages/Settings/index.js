@@ -42,7 +42,6 @@ function Settings() {
   const classes = useStyles();
   const { user, isLoading } = useAuth0();
   const [, setName] = useState('');
-  const [, setEmail] = useState('');
   const [, setStatus] = useState('');
 
   return (
@@ -114,27 +113,6 @@ function Settings() {
                     size="small"
                     value={user.name}
                     onChange={(event) => setName(event.target.value)}
-                  />
-                )}
-            </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={3}>
-              {isLoading
-                ? <Skeleton animation="wave" height="50px" />
-                : 'Email'}
-            </Grid>
-            <Grid item xs={9}>
-              {isLoading
-                ? <Skeleton animation="wave" height="50px" />
-                : (
-                  <TextField
-                    id="email"
-                    variant="outlined"
-                    color="secondary"
-                    size="small"
-                    value={user.email}
-                    onChange={(event) => setEmail(event.target.value)}
                   />
                 )}
             </Grid>
