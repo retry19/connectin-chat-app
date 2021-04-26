@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {
   Home,
   Login,
+  NewChat,
   PrivateChat,
   Register,
   Search
@@ -37,7 +38,8 @@ export default function App() {
           <Route path="/search" component={Search} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/chat" component={PrivateChat} />
+          <Route path="/chat" exact component={PrivateChat} />
+          <Route path="/chat/new" component={NewChat} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>
