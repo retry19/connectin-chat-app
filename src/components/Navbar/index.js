@@ -79,10 +79,10 @@ function Navbar() {
             : <Avatar alt={user.name} src={user.picture} className={classes.large} />}
           {isLoading
             ? <Skeleton animation="wave" variant="text" width="100%" />
-            : <Typography component="p" color="#000000" variant="body1" className={classes.bolder}>{user.name}</Typography>}
+            : <Typography component="p" variant="body1" className={classes.bolder}>{user.name}</Typography>}
           {isLoading
             ? <Skeleton animation="wave" variant="text" width="100%" />
-            : <Typography component="span" color="#7f7f7f" variant="subtitle2" style={{ fontWeight: 400 }}>{user.email}</Typography>}
+            : <Typography component="span" color="initial" variant="subtitle2" style={{ fontWeight: 400 }}>{user.email}</Typography>}
 
         </div>
         <Divider />
