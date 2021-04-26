@@ -1,6 +1,7 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import {
+  About,
   Home,
   Login,
   NewChat,
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/chat" exact component={PrivateChat} />
           <Route path="/chat/new" component={NewChat} />
           <Route path="/settings" component={Settings} />
+          <Route path="/about" component={About} />
         </Switch>
       </BrowserRouter>
     </ThemeProvider>

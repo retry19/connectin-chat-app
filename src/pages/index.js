@@ -5,6 +5,7 @@ import Register from './Register';
 import Search from './Search';
 import NewChat from './NewChat';
 import Settings from './Settings';
+import About from './About';
 
 export {
   Home,
@@ -14,4 +15,5 @@ export {
   Search,
   NewChat,
   Settings,
+  About,
 };

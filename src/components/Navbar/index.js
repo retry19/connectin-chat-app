@@ -86,10 +86,12 @@ function Navbar() {
         </List>
         <Divider />
         <List>
-          <ListItem button>
-            <ListItemIcon><Help /></ListItemIcon>
-            <ListItemText primary="About Us" />
-          </ListItem>
+          <Link to="/about" className={classes.listLink}>
+            <ListItem button>
+              <ListItemIcon><Help /></ListItemIcon>
+              <ListItemText primary="About" />
+            </ListItem>
+          </Link>
         </List>
       </div>
     );
