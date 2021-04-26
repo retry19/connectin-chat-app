@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './assets/css/index.css';
+import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Auth0Provider
+    domain="connectin-chat-app.au.auth0.com"
+    clientId="CxPByFvRGan4dqjY13RWEVkP0IhrYxTI"
+    redirectUri="http://localhost:3000"
+    scope="read:current_user update:current_user_metadata"
+  >
     <App />
-  </React.StrictMode>,
+  </Auth0Provider>,
   document.getElementById('root')
 );
 

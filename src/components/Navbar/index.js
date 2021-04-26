@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   AppBar,
   Avatar,
@@ -13,6 +14,7 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import { ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -49,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   const classes = useStyles();
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
+  const { logout, user, isLoading } = useAuth0();
 
   const toggleDrawer = (isOpen) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -56,6 +59,10 @@ function Navbar() {
     }
 
     setIsDrawerOpened(isOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   function drawer() {
@@ -67,31 +74,54 @@ function Navbar() {
         onKeyDown={toggleDrawer(false)}
       >
         <div className={classes.drawerHeading}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.large} />
-          <Typography component="p" color="#000000" variant="body1" className={classes.bolder}>Reza Rachmanuddin</Typography>
-          <Typography component="span" color="#151515" variant="subtitle2">rezarahmanudin@gmail.com</Typography>
+          {isLoading
+            ? <Skeleton animation="wave" variant="circle" className={classes.large} />
+            : <Avatar alt={user.name} src={user.picture} className={classes.large} />}
+          {isLoading
+            ? <Skeleton animation="wave" variant="text" width="100%" />
+            : <Typography component="p" color="#000000" variant="body1" className={classes.bolder}>{user.name}</Typography>}
+          {isLoading
+            ? <Skeleton animation="wave" variant="text" width="100%" />
+            : <Typography component="span" color="#7f7f7f" variant="subtitle2" style={{ fontWeight: 400 }}>{user.email}</Typography>}
+
         </div>
         <Divider />
         <List>
-          <Link to="/settings" className={classes.listLink}>
-            <ListItem button>
-              <ListItemIcon><Settings /></ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
-          </Link>
-          <ListItem button>
-            <ListItemIcon><ExitToApp /></ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          {isLoading
+            ? (
+              <>
+                <Skeleton animation="wave" width="90%" height="50px" style={{ margin: '0 15px' }} />
+                <Skeleton animation="wave" width="90%" height="50px" style={{ margin: '0 15px' }} />
+              </>
+            )
+            : (
+              <>
+                <Link to="/settings" className={classes.listLink}>
+                  <ListItem button>
+                    <ListItemIcon><Settings /></ListItemIcon>
+                    <ListItemText primary="Settings" />
+                  </ListItem>
+                </Link>
+                <ListItem button onClick={handleLogout}>
+                  <ListItemIcon><ExitToApp /></ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              </>
+            )}
         </List>
         <Divider />
         <List>
-          <Link to="/about" className={classes.listLink}>
-            <ListItem button>
-              <ListItemIcon><Help /></ListItemIcon>
-              <ListItemText primary="About" />
-            </ListItem>
-          </Link>
+          {isLoading
+            ? <Skeleton animation="wave" width="90%" height="50px" style={{ margin: '0 15px' }} />
+            : (
+              <Link to="/about" className={classes.listLink}>
+                <ListItem button>
+                  <ListItemIcon><Help /></ListItemIcon>
+                  <ListItemText primary="About" />
+                </ListItem>
+              </Link>
+
+            )}
         </List>
       </div>
     );

@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   Avatar,
   Box,
@@ -5,16 +6,20 @@ import {
   Container,
   CssBaseline,
   makeStyles,
-  TextField,
   Typography
 } from '@material-ui/core';
 import { Lock } from '@material-ui/icons';
-import { Link } from 'react-router-dom';
 import { Copyright } from '../../components';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+    height: '100vh'
+  },
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -23,69 +28,48 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(7, 0, 2),
   },
 }));
 
 export default function Login() {
   const classes = useStyles();
+  const { loginWithRedirect, getIdTokenClaims } = useAuth0();
+
+  // eslint-disable-next-line no-console
+  getIdTokenClaims().then((res) => console.log(res));
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" className={classes.container}>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <Lock />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Login
+          Welcome
         </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Typography variant="body1" color="textSecondary" align="center">
-            Don&apos;t have an account?&nbsp;
-            <Link to="/register">
-              Register
-            </Link>
-          </Typography>
-        </form>
+        <Typography
+          component="p"
+          variant="subtitle2"
+          style={{ fontWeight: 400 }}
+        >
+          Please login before continue to app
+        </Typography>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => loginWithRedirect()}
+        >
+          Login
+        </Button>
+        <small>Powered by Auth0</small>
       </div>
-      <Box mt={8}>
+      <Box mt={8} style={{ position: 'absolute', bottom: '20px' }}>
         <Copyright />
       </Box>
     </Container>
