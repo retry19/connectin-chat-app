@@ -33,7 +33,12 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end'
   },
   badge: {
-    marginRight: theme.spacing(2.5),
+    marginRight: theme.spacing(1.2),
+    marginTop: theme.spacing(1.3),
+  },
+  time: {
+    fontSize: '0.8rem',
+    fontWeight: 400
   }
 }));
 
@@ -47,33 +52,46 @@ function ChatItem({ title = '', description, sender, time, isDirectMessage = fal
         <Avatar alt={title || sender} src={photo} />
       </ListItemAvatar>
       <ListItemText
-        primary={title || sender}
+        primary={(
+          <Typography component="p" variant="body1">
+            {title || sender}
+          </Typography>
+        )}
         secondary={
           isDirectMessage
-            ? description
+            ? (
+              <Typography component="small" variant="caption" style={{ color: '#7f7f7f' }}>
+                {description}
+              </Typography>
+            )
             : (
               <>
                 <Typography
                   component="span"
-                  variant="body2"
+                  variant="caption"
                   className={classes.inline}
                   color="textPrimary"
                 >
                   {sender}
                 </Typography>
-                {` — ${description}`}
+                <Typography component="small" variant="caption" style={{ color: '#7f7f7f' }}>
+                  {` - ${description}`}
+                </Typography>
               </>
             )
         }
       />
       <ListItemSecondaryAction className={classes.flexTop}>
-        <Typography component="small" color="textSecondary" variant="subtitle2">{time}</Typography>
+        <Typography
+          component="small"
+          color="textSecondary"
+          variant="subtitle2"
+          className={classes.time}
+        >
+          {time}
+        </Typography>
         {newMessage ? (
           <Badge
-            anchorOrigin={{
-              vertical: 'center',
-              horizontal: 'center',
-            }}
             color="error"
             badgeContent={newMessage}
             className={classes.badge}
