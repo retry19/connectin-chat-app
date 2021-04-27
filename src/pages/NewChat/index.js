@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+/* eslint-disable max-len */
 import {
   Avatar,
   Box,
@@ -13,8 +15,13 @@ import {
 } from '@material-ui/core';
 import { Search, Sort } from '@material-ui/icons';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { Skeleton } from '@material-ui/lab';
+import { useHistory } from 'react-router-dom';
+import Fuse from 'fuse.js';
 import { NavbarBack } from '../../components';
+import { GET_MY_CONTACTS } from '../../constants/query';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
@@ -55,34 +62,96 @@ const useStyles = makeStyles((theme) => ({
       cursor: 'pointer',
     }
   },
+  rotate180: {
+    transform: 'rotate(180deg)'
+  }
 }));
 
-function Contact({ name, status }) {
+function Contact({ user }) {
+  const { name, picture, status } = user;
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleClick = () => history.push('/chat');
+
   return (
     <List style={{ padding: 0 }}>
-      <ListItem alignItems="flex-start" className={classes.touchable} onClick={() => {}}>
+      <ListItem alignItems="flex-start" className={classes.touchable} onClick={handleClick}>
         <ListItemAvatar>
-          <Avatar alt={name} src="/" />
+          <Avatar alt={name} src={picture} />
         </ListItemAvatar>
-        <ListItemText primary={name} secondary={status} />
+        <ListItemText primary={name} secondary={status || 'Ada'} />
       </ListItem>
     </List>
   );
 }
 
 Contact.propTypes = {
-  name: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    picture: PropTypes.string.isRequired,
+    status: PropTypes.string,
+  }),
 };
+
+function SkeletonLoading() {
+  return (
+    <>
+      {Array.from(Array(5), (e, i) => (
+        <div key={i} style={{ padding: '10px 16px', display: 'flex' }}>
+          <Skeleton animation="wave" variant="circle" width={40} height={40} style={{ marginTop: '6px' }} />
+          <div style={{ padding: '0 16px' }}>
+            <Skeleton animation="wave" variant="text" width={250} />
+            <Skeleton animation="wave" variant="text" width={150} />
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
 
 function NewChat() {
   const classes = useStyles();
   const [isSearch, setIsSearch] = useState(false);
+  const [isAscending, setIsAscending] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [usersFound, setUsersFound] = useState([]);
+  const [usersArray, setusersArray] = useState([]);
+  const { loading, error, data } = useQuery(GET_MY_CONTACTS, {
+    variables: { user_id: 'google-oauth2|110946573596758226965' }
+  });
+
+  useEffect(() => {
+    if (data) {
+      setUsers(data.users);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setusersArray(usersFound.length ? usersFound : users);
+  }, [users, usersFound]);
 
   const handleClickSearch = () => {
     setIsSearch(true);
   };
+
+  const handleReverseList = () => {
+    setUsers([].concat(users).reverse());
+    setIsAscending(!isAscending);
+  };
+
+  const handleSearch = (event) => {
+    const keyword = event.target.value;
+    const fuse = new Fuse(users, { keys: ['name'] });
+    const result = fuse.search(keyword);
+    const found = [];
+    result.forEach((res) => {
+      found.push(res.item);
+    });
+    setUsersFound(found);
+  };
+
+  if (error) return `Error! ${error}`;
 
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
@@ -93,7 +162,8 @@ function NewChat() {
               className={classes.inputSearch}
               placeholder="Search"
               inputProps={{ 'aria-label': 'search' }}
-              autoFocus="on"
+              autoFocus
+              onChange={handleSearch}
             />
           )
           : (
@@ -104,16 +174,23 @@ function NewChat() {
               <IconButton color="inherit" onClick={handleClickSearch}>
                 <Search />
               </IconButton>
-              <IconButton color="inherit">
-                <Sort />
+              <IconButton color="inherit" onClick={handleReverseList}>
+                <Sort className={!isAscending ? classes.rotate180 : null} />
               </IconButton>
             </>
           )}
       </NavbarBack>
       <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content}>
-          {!isSearch && <div className={classes.info}>Sort by name</div>}
-          <Contact name="Lord Za" status="Sedang sibuk" />
+          {!isSearch && (
+          <div className={classes.info}>
+            Sort by name (
+            {isAscending ? 'A-Z' : 'Z-A'}
+            )
+          </div>
+          )}
+          {loading && <SkeletonLoading />}
+          {usersArray && usersArray.map((user) => <Contact key={user.id} user={user} />)}
         </Box>
       </Container>
     </Box>
