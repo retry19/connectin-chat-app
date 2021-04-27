@@ -1,4 +1,3 @@
-/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
 import {
   BrowserRouter,
@@ -7,7 +6,7 @@ import {
   Route
 } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import PropTypes from 'prop-types';
+import { LinearProgress } from '@material-ui/core';
 import {
   About,
   Home,
@@ -18,29 +17,21 @@ import {
   Settings
 } from '../pages';
 
-function PrivateRoute({ children, ...rest }) {
-  const { isAuthenticated } = useAuth0();
+function PrivateRoute({ ...rest }) {
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <LinearProgress />;
+  }
+
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />;
+  }
 
   return (
-    <Route
-      {...rest}
-      render={({ location }) => (isAuthenticated ? (
-        children
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: location }
-          }}
-        />
-      ))}
-    />
+    <Route {...rest} />
   );
 }
-
-PrivateRoute.propTypes = {
-  children: PropTypes.element
-};
 
 function Routes() {
   return (
