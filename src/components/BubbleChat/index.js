@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import { Box, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
@@ -81,7 +82,7 @@ function BubbleChat({ message, time, isMe }) {
 BubbleChat.propTypes = {
   message: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
-  isMe: PropTypes.bool.isRequired,
+  isMe: PropTypes.bool,
 };
 
 export default BubbleChat;

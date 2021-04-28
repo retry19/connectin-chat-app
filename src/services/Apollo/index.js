@@ -25,10 +25,10 @@ export default function Apollo(props) {
   }
 
   getIdTokenClaims().then((res) => {
-    // eslint-disable-next-line no-console
-    console.table(res?.__raw);
     if (res) {
       setToken(res.__raw);
+      // eslint-disable-next-line no-console
+      console.log(token);
     }
   });
 

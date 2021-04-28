@@ -20,8 +20,11 @@ import { useQuery } from '@apollo/client';
 import { Skeleton } from '@material-ui/lab';
 import { useHistory } from 'react-router-dom';
 import Fuse from 'fuse.js';
+import { useRecoilState } from 'recoil';
+import { useAuth0 } from '@auth0/auth0-react';
 import { NavbarBack } from '../../components';
-import { GET_MY_CONTACTS } from '../../constants/query';
+import { query } from '../../constants';
+import { recoilState } from '../../services';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
@@ -70,9 +73,14 @@ const useStyles = makeStyles((theme) => ({
 function Contact({ user }) {
   const { name, picture, status } = user;
   const classes = useStyles();
+  // eslint-disable-next-line no-unused-vars
   const history = useHistory();
+  const setToUser = useRecoilState(recoilState.toUser)[1];
 
-  const handleClick = () => history.push('/chat');
+  const handleClick = () => {
+    setToUser(user);
+    return history.push('/chat');
+  };
 
   return (
     <List style={{ padding: 0 }}>
@@ -117,9 +125,11 @@ function NewChat() {
   const [users, setUsers] = useState([]);
   const [usersFound, setUsersFound] = useState([]);
   const [usersArray, setusersArray] = useState([]);
-  const { loading, error, data } = useQuery(GET_MY_CONTACTS, {
-    variables: { user_id: 'google-oauth2|110946573596758226965' }
-  });
+  const { user: userLogged, isLoading } = useAuth0();
+  const params = (!isLoading && userLogged)
+    ? { user_id: userLogged.sub }
+    : {};
+  const { loading, error, data } = useQuery(query.GET_MY_CONTACTS, { variables: params });
 
   useEffect(() => {
     if (data) {

@@ -1,4 +1,7 @@
-/* eslint-disable import/prefer-default-export */
 import Apollo from './Apollo';
+import recoilState from './Recoil';
 
-export { Apollo };
+export {
+  Apollo,
+  recoilState,
+};

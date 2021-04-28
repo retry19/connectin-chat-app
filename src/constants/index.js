@@ -1,4 +1,7 @@
-/* eslint-disable import/prefer-default-export */
 import theme from './theme';
+import query from './query';
 
-export { theme };
+export {
+  theme,
+  query,
+};

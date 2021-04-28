@@ -4,6 +4,7 @@ import {
   Container,
   IconButton,
   InputBase,
+  LinearProgress,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -14,8 +15,15 @@ import {
 } from '@material-ui/core';
 import { Delete, MoreVert, Send } from '@material-ui/icons';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import PropTypes from 'prop-types';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useSubscription } from '@apollo/client';
+import moment from 'moment';
 import { BgChatBlue } from '../../assets';
 import { NavbarBack, BubbleChat } from '../../components';
+import { recoilState } from '../../services';
+import { query } from '../../constants';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
@@ -55,9 +63,20 @@ const useStyles = makeStyles((theme) => ({
   inputForm: {
     flex: 1,
   },
+  info: {
+    fontSize: '0.7rem',
+    color: theme.palette.secondary.dark,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    textAlign: 'center',
+    opacity: 0.5
+  },
 }));
 
-function PrivateChat() {
+function Header({ user }) {
+  const { name, picture, status } = user;
   const classes = useStyles();
   const [moreMenu, setMoreMenu] = useState(null);
 
@@ -70,60 +89,155 @@ function PrivateChat() {
   };
 
   return (
-    <Box minHeight="100vh" className={classes.backgroundGray}>
-      <NavbarBack link="/">
-        <ListItem alignItems="flex-start" className={classes.noPadding}>
-          <ListItemAvatar>
-            <Avatar alt="Bambang Susatno" src="/" />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Bambang Susatno"
-            secondary={(
-              <Typography
-                component="small"
-                variant="subtitle2"
-                className={classes.onlineStatus}
-              >
-                Online
-              </Typography>
+    <NavbarBack link="/">
+      <ListItem alignItems="flex-start" className={classes.noPadding}>
+        <ListItemAvatar>
+          <Avatar alt={name} src={picture} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={name}
+          secondary={(
+            <Typography
+              component="small"
+              variant="subtitle2"
+              className={classes.onlineStatus}
+            >
+              {status}
+            </Typography>
             )}
-          />
-        </ListItem>
-        <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
-          <MoreVert />
-        </IconButton>
-        <Menu
-          id="more-menu"
-          anchorEl={moreMenu}
-          keepMounted
-          open={moreMenu}
-          onClose={handleHideMoreMenu}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-        >
-          <MenuItem>
-            <Delete style={{ marginRight: '5px' }} />
-            Remove Chat
-          </MenuItem>
-        </Menu>
-      </NavbarBack>
+        />
+      </ListItem>
+      <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
+        <MoreVert />
+      </IconButton>
+      <Menu
+        id="more-menu"
+        anchorEl={moreMenu}
+        keepMounted
+        open={moreMenu}
+        onClose={handleHideMoreMenu}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem>
+          <Delete style={{ marginRight: '5px' }} />
+          Remove Chat
+        </MenuItem>
+      </Menu>
+    </NavbarBack>
+  );
+}
 
+Header.propTypes = {
+  user: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    picture: PropTypes.string.isRequired,
+    status: PropTypes.string,
+  }).isRequired,
+};
+
+function HeaderDate({ date }) {
+  const classes = useStyles();
+  return (
+    <div className={classes.info}>
+      {date}
+    </div>
+  );
+}
+
+HeaderDate.propTypes = {
+  date: PropTypes.string.isRequired
+};
+
+function PrivateChat() {
+  const classes = useStyles();
+  const toUser = useRecoilState(recoilState.toUser)[0];
+  const { user, isLoading } = useAuth0();
+  const params = { where: {} };
+  if (!isLoading && user) {
+    if (toUser && !toUser.id) {
+      params.where = {
+        _and: [
+          {
+            deleted_at: {
+              _is_null: true
+            }
+          },
+          {
+            to_user_id: {
+              _is_null: true,
+            },
+          }
+        ]
+      };
+    } else if (toUser && toUser.id) {
+      params.where = {
+        _and: [
+          {
+            deleted_at: {
+              _is_null: true
+            }
+          },
+          {
+            _or: [
+              {
+                from_user_id: {
+                  _eq: user.sub,
+                },
+                to_user_id: {
+                  _eq: toUser.id,
+                },
+              },
+              {
+                from_user_id: {
+                  _eq: toUser.id,
+                },
+                to_user_id: {
+                  _eq: user.sub,
+                },
+              },
+            ],
+          }
+        ],
+      };
+    }
+  }
+  const { loading, data } = useSubscription(query.GET_CHAT, { variables: params });
+  let date = '';
+
+  const checkSameDay = (d) => {
+    if (date === d) {
+      return true;
+    }
+
+    date = d;
+    return false;
+  };
+
+  return (
+    <Box minHeight="100vh" className={classes.backgroundGray}>
+      <Header user={toUser} />
       <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content}>
-          <BubbleChat message="Assalamualaikum" time="7:19 PM" isMe={1} />
-          <BubbleChat message="Waalaikumsalam" time="7:22 PM" isMe={0} />
+          {loading && <LinearProgress />}
+          {data?.messages?.map((d) => (
+            <>
+              {!checkSameDay(moment(d.created_at).format('L')) && <HeaderDate date={moment(d.created_at).format('LL')} />}
+              <BubbleChat message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} />
+            </>
+          ))}
           <Box className={classes.chatFooter}>
             <form className={classes.messageForm} noValidate autoComplete="off">
               <InputBase
                 placeholder="Type your message..."
                 inputProps={{ 'aria-label': 'type your message' }}
-                autoFocus="on"
+                autoFocus
                 className={classes.inputForm}
               />
               <IconButton>
