@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import { ExitToApp, Help, Menu, Search, Settings } from '@material-ui/icons';
+import { ExitToApp, Help, Menu, Settings } from '@material-ui/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -137,11 +137,6 @@ function Navbar() {
           <Typography variant="h6" className={classes.title}>
             Connect-in
           </Typography>
-          <Link to="/search">
-            <IconButton edge="end" color="inherit" aria-label="search">
-              <Search htmlColor="#ffffff" />
-            </IconButton>
-          </Link>
         </Toolbar>
         <SwipeableDrawer
           anchor="left"
