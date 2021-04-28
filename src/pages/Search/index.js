@@ -40,7 +40,7 @@ function Search() {
           className={classes.inputSearch}
           placeholder="Search"
           inputProps={{ 'aria-label': 'search' }}
-          autoFocus="on"
+          autoFocus
         />
       </NavbarBack>
       <Container maxWidth="xs" className={classes.container}>

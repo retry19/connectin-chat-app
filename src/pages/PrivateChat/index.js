@@ -114,7 +114,7 @@ function Header({ user }) {
         id="more-menu"
         anchorEl={moreMenu}
         keepMounted
-        open={moreMenu}
+        open={moreMenu !== null}
         onClose={handleHideMoreMenu}
         anchorOrigin={{
           vertical: 'top',
