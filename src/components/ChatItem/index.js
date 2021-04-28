@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { recoilState } from '../../services';
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -42,12 +44,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ChatItem({ title = '', description, sender, time, isDirectMessage = false, photo = null, newMessage = 0 }) {
+function ChatItem({ title = '', description, sender, time, isDirectMessage = false, photo = null, newMessage = 0, user = null }) {
   const classes = useStyles();
   const history = useHistory();
+  const setToUser = useRecoilState(recoilState.toUser)[1];
+
+  const handleClick = () => {
+    setToUser(user);
+    return history.push('/chat');
+  };
 
   return (
-    <ListItem alignItems="flex-start" className={classes.touchable} onClick={() => history.push('/chat')}>
+    <ListItem alignItems="flex-start" className={classes.touchable} onClick={handleClick}>
       <ListItemAvatar>
         <Avatar alt={title || sender} src={photo} />
       </ListItemAvatar>
@@ -109,7 +117,13 @@ ChatItem.propTypes = {
   time: PropTypes.string.isRequired,
   isDirectMessage: PropTypes.bool,
   photo: PropTypes.string,
-  newMessage: PropTypes.number
+  newMessage: PropTypes.number,
+  user: PropTypes.shape({
+    isGroup: PropTypes.bool,
+    name: PropTypes.string.isRequired,
+    picture: PropTypes.string.isRequired,
+    status: PropTypes.string,
+  }),
 };
 
 export default ChatItem;

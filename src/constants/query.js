@@ -31,5 +31,68 @@ export default {
         to_user_id
       }
     }
+  `,
+  GET_MESSAGE_GROUP: gql`
+    subscription GetMessageGroup($my_user_id: String!) {
+      messages(where: {
+        _and: [
+          {
+            deleted_at: {
+              _is_null: true
+            }
+          },
+          {
+            to_user_id: {
+              _is_null: false
+            }
+          },
+          {
+            _or: [
+              {
+                from_user_id: {
+                  _eq: $my_user_id
+                }
+              },
+              {
+                to_user_id: {
+                  _eq: $my_user_id
+                }
+              }
+            ]
+          }
+        ]
+      }) {
+        id
+        message
+        created_at
+        to_user {
+          id
+          name
+          picture
+          status
+        }
+        from_user {
+          id
+          name
+          picture
+          status
+        }
+      }
+    }  
+  `,
+  GET_PUBLIC_MESSAGE: gql`
+    subscription GetPublicMessage {
+      messages(limit: 1, where: {_and: {deleted_at: {_is_null: true}, to_user_id: {_is_null: true}}}, order_by: {created_at: desc}) {
+        id
+        message
+        created_at
+        from_user {
+          id
+          name
+          picture
+          status
+        }
+      }
+    }
   `
 };

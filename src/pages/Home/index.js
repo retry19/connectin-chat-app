@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
       <Navbar type="home" />

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import {
   Avatar,
   Box,
@@ -76,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Header({ user }) {
-  const { name, picture, status } = user;
+  const { name, picture, status, isGroup = false } = user;
   const classes = useStyles();
   const [moreMenu, setMoreMenu] = useState(null);
 
@@ -107,35 +108,40 @@ function Header({ user }) {
             )}
         />
       </ListItem>
-      <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
-        <MoreVert />
-      </IconButton>
-      <Menu
-        id="more-menu"
-        anchorEl={moreMenu}
-        keepMounted
-        open={moreMenu !== null}
-        onClose={handleHideMoreMenu}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem>
-          <Delete style={{ marginRight: '5px' }} />
-          Remove Chat
-        </MenuItem>
-      </Menu>
+      {!isGroup && (
+        <>
+          <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
+            <MoreVert />
+          </IconButton>
+          <Menu
+            id="more-menu"
+            anchorEl={moreMenu}
+            keepMounted
+            open={moreMenu !== null}
+            onClose={handleHideMoreMenu}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <MenuItem>
+              <Delete style={{ marginRight: '5px' }} />
+              Remove Chat
+            </MenuItem>
+          </Menu>
+        </>
+      )}
     </NavbarBack>
   );
 }
 
 Header.propTypes = {
   user: PropTypes.shape({
+    isGroup: PropTypes.bool,
     name: PropTypes.string.isRequired,
     picture: PropTypes.string.isRequired,
     status: PropTypes.string,
@@ -229,7 +235,7 @@ function PrivateChat() {
           {data?.messages?.map((d) => (
             <>
               {!checkSameDay(moment(d.created_at).format('L')) && <HeaderDate date={moment(d.created_at).format('LL')} />}
-              <BubbleChat message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} />
+              <BubbleChat message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} picture={toUser.isGroup && d.picture} />
             </>
           ))}
           <Box className={classes.chatFooter}>
