@@ -6,13 +6,15 @@ import {
   Container,
   Grid,
   makeStyles,
+  Snackbar,
   TextField
 } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import { PhotoCamera } from '@material-ui/icons';
+import { Alert, Skeleton } from '@material-ui/lab';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { NavbarBack } from '../../components';
+import query from '../../constants/query';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
@@ -40,9 +42,41 @@ const useStyles = makeStyles((theme) => ({
 
 function Settings() {
   const classes = useStyles();
-  const { user, isLoading } = useAuth0();
-  const [, setName] = useState('');
-  const [, setStatus] = useState('');
+  const { user } = useAuth0();
+  const { data, loading } = useQuery(query.GET_USER_BY_ID, {
+    variables: { user_id: user.sub }
+  });
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [name, setName] = useState('');
+  const [status, setStatus] = useState(null);
+  const [updateUser] = useMutation(query.UPDATE_USER, {
+    variables: {
+      user_id: user?.sub,
+      name,
+      status
+    }
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      setName(data.users[0].name);
+      setStatus(data.users[0].status);
+    }
+  }, [loading]);
+
+  const handleOpenSnackbar = () => {
+    setIsOpenSnackbar(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setIsOpenSnackbar(false);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    updateUser();
+    handleOpenSnackbar();
+  };
 
   return (
     <Box minHeight="100vh" className={classes.backgroundGray}>
@@ -51,59 +85,34 @@ function Settings() {
         <Box className={classes.content}>
           <Grid container spacing={3}>
             <Grid item xs={3}>
-              {isLoading
+              {loading
                 ? <Skeleton animation="wave" height="50px" />
                 : 'Picture'}
             </Grid>
             <Grid item xs={9}>
-              {isLoading
+              {loading
                 ? (
-                  <>
-                    <Skeleton animation="wave" variant="circle">
-                      <Avatar className={classes.large} />
-                    </Skeleton>
-                    <Skeleton animation="wave">
-                      <Button
-                        className={classes.mt1}
-                        startIcon={<PhotoCamera />}
-                      >
-                        Upload
-                      </Button>
-                    </Skeleton>
-                  </>
+                  <Skeleton animation="wave" variant="circle">
+                    <Avatar className={classes.large} />
+                  </Skeleton>
                 )
                 : (
-                  <>
-                    <Avatar alt={user.name} className={classes.large} src={user.picture} />
-                    <input
-                      accept="image/*"
-                      className={classes.dNone}
-                      id="contained-button-file"
-                      type="file"
-                    />
-                    <label htmlFor="contained-button-file">
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        size="small"
-                        className={classes.mt1}
-                        startIcon={<PhotoCamera />}
-                      >
-                        Upload
-                      </Button>
-                    </label>
-                  </>
+                  <Avatar
+                    alt={name}
+                    className={classes.large}
+                    src={data.users[0].picture}
+                  />
                 )}
             </Grid>
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={3}>
-              {isLoading
+              {loading
                 ? <Skeleton animation="wave" height="50px" />
                 : 'Name'}
             </Grid>
             <Grid item xs={9}>
-              {isLoading
+              {loading
                 ? <Skeleton animation="wave" height="50px" />
                 : (
                   <TextField
@@ -111,7 +120,7 @@ function Settings() {
                     variant="outlined"
                     color="secondary"
                     size="small"
-                    value={user.name}
+                    value={name}
                     onChange={(event) => setName(event.target.value)}
                   />
                 )}
@@ -119,12 +128,12 @@ function Settings() {
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={3}>
-              {isLoading
+              {loading
                 ? <Skeleton animation="wave" height="50px" />
                 : 'Status'}
             </Grid>
             <Grid item xs={9}>
-              {isLoading
+              {loading
                 ? <Skeleton animation="wave" height="50px" />
                 : (
                   <TextField
@@ -132,7 +141,7 @@ function Settings() {
                     variant="outlined"
                     color="secondary"
                     size="small"
-                    value={user.status}
+                    value={status || ''}
                     onChange={(event) => setStatus(event.target.value)}
                   />
                 )}
@@ -141,7 +150,7 @@ function Settings() {
           <Grid container spacing={3}>
             <Grid item xs={3} />
             <Grid item xs={9}>
-              {isLoading
+              {loading
                 ? (
                   <Skeleton animation="wave">
                     <Button className={classes.mt1}>
@@ -154,12 +163,18 @@ function Settings() {
                     variant="contained"
                     color="primary"
                     className={classes.mt1}
+                    onClick={handleSubmit}
                   >
                     Save
                   </Button>
                 )}
             </Grid>
           </Grid>
+          <Snackbar open={isOpenSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity="success">
+              Data berhasil diperbaharui :D
+            </Alert>
+          </Snackbar>
         </Box>
       </Container>
     </Box>

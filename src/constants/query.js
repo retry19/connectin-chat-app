@@ -101,5 +101,14 @@ export default {
         id
       }
     }  
+  `,
+  UPDATE_USER: gql`
+    mutation UpdateUser($user_id: String!, $name: String!, $status: String = "") {
+      update_users(where: {id: {_eq: $user_id}}, _set: {name: $name, status: $status}) {
+        returning {
+          id
+        }
+      }
+    }  
   `
 };
