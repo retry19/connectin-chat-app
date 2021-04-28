@@ -34,7 +34,7 @@ export default {
   `,
   GET_MESSAGE_GROUP: gql`
     subscription GetMessageGroup($my_user_id: String!) {
-      messages(where: {
+      messages(order_by: {created_at: desc}, where: {
         _and: [
           {
             deleted_at: {
@@ -94,5 +94,12 @@ export default {
         }
       }
     }
+  `,
+  INSERT_MESSAGE: gql`
+    mutation InsertMessage($from_user_id: String!, $message: String!, $to_user_id: String = "") {
+      insert_messages_one(object: {from_user_id: $from_user_id, message: $message, to_user_id: $to_user_id}) {
+        id
+      }
+    }  
   `
 };

@@ -15,11 +15,11 @@ import {
   Typography
 } from '@material-ui/core';
 import { Delete, MoreVert, Send } from '@material-ui/icons';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useSubscription } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client';
 import moment from 'moment';
 import { BgChatBlue } from '../../assets';
 import { NavbarBack, BubbleChat } from '../../components';
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '90vh',
     maxWidth: '444px',
     width: '100%',
+    paddingBottom: theme.spacing(10)
   },
   noPadding: {
     padding: 0
@@ -91,24 +92,25 @@ function Header({ user }) {
 
   return (
     <NavbarBack link="/">
-      <ListItem alignItems="flex-start" className={classes.noPadding}>
-        <ListItemAvatar>
-          <Avatar alt={name} src={picture} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={name}
-          secondary={(
-            <Typography
-              component="small"
-              variant="subtitle2"
-              className={classes.onlineStatus}
-            >
-              {status}
-            </Typography>
+      <>
+        <ListItem alignItems="flex-start" className={classes.noPadding}>
+          <ListItemAvatar>
+            <Avatar alt={name} src={picture} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={name}
+            secondary={(
+              <Typography
+                component="small"
+                variant="subtitle2"
+                className={classes.onlineStatus}
+              >
+                {status}
+              </Typography>
             )}
-        />
-      </ListItem>
-      {!isGroup && (
+          />
+        </ListItem>
+        {!isGroup && (
         <>
           <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
             <MoreVert />
@@ -134,7 +136,8 @@ function Header({ user }) {
             </MenuItem>
           </Menu>
         </>
-      )}
+        )}
+      </>
     </NavbarBack>
   );
 }
@@ -215,8 +218,24 @@ function PrivateChat() {
     }
   }
   const { loading, data } = useSubscription(query.GET_CHAT, { variables: params });
-  let date = '';
+  const isInitialMount = useRef(true);
 
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      const boxForm = document.querySelector('#box-form');
+      const bubbleChatElements = document.querySelectorAll('.bubble-chat');
+      if (bubbleChatElements.length) {
+        const lastBubbleChatElement = bubbleChatElements[bubbleChatElements.length - 1];
+        if (lastBubbleChatElement.offsetTop >= boxForm.offsetTop) {
+          window.scrollTo(0, document.body.scrollHeight);
+        }
+      }
+    }
+  }, [data]);
+
+  let date = '';
   const checkSameDay = (d) => {
     if (date === d) {
       return true;
@@ -224,6 +243,21 @@ function PrivateChat() {
 
     date = d;
     return false;
+  };
+
+  const [message, setMessage] = useState('');
+  const [insertMessage] = useMutation(query.INSERT_MESSAGE, {
+    variables: {
+      from_user_id: user?.sub,
+      message,
+      to_user_id: toUser.id || null
+    }
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    insertMessage();
+    setMessage('');
   };
 
   return (
@@ -235,18 +269,20 @@ function PrivateChat() {
           {data?.messages?.map((d) => (
             <>
               {!checkSameDay(moment(d.created_at).format('L')) && <HeaderDate date={moment(d.created_at).format('LL')} />}
-              <BubbleChat message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} picture={toUser.isGroup && d.picture} />
+              <BubbleChat key={d.id} message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} picture={toUser.isGroup && d.picture} />
             </>
           ))}
-          <Box className={classes.chatFooter}>
-            <form className={classes.messageForm} noValidate autoComplete="off">
+          <Box className={classes.chatFooter} id="box-form">
+            <form className={classes.messageForm} noValidate autoComplete="off" onSubmit={handleSubmit}>
               <InputBase
                 placeholder="Type your message..."
                 inputProps={{ 'aria-label': 'type your message' }}
                 autoFocus
                 className={classes.inputForm}
+                onChange={(event) => setMessage(event.target.value)}
+                value={message}
               />
-              <IconButton>
+              <IconButton onClick={handleSubmit}>
                 <Send />
               </IconButton>
             </form>

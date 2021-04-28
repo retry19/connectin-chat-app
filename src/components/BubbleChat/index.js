@@ -59,11 +59,11 @@ const useStyles = makeStyles((theme) => ({
   time: {}
 }));
 
-function BubbleChat({ message, time, isMe }) {
+function BubbleChat({ key, message, time, isMe }) {
   const classes = useStyles();
 
   return (
-    <Box className={[classes.bubbleWrapper, (isMe ? classes.me : classes.you)]}>
+    <Box key={key} className={[classes.bubbleWrapper, (isMe ? classes.me : classes.you), 'bubble-chat']}>
       <Box className={[
         classes.bubble,
         (isMe
@@ -80,6 +80,7 @@ function BubbleChat({ message, time, isMe }) {
 }
 
 BubbleChat.propTypes = {
+  key: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   isMe: PropTypes.bool,
