@@ -10,11 +10,9 @@ import {
   ListItemAvatar,
   ListItemText,
   makeStyles,
-  Menu,
-  MenuItem,
   Typography
 } from '@material-ui/core';
-import { Delete, MoreVert, Send } from '@material-ui/icons';
+import { Send } from '@material-ui/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import PropTypes from 'prop-types';
@@ -78,17 +76,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Header({ user }) {
-  const { name, picture, status, isGroup = false } = user;
+  const { name, picture, status } = user;
   const classes = useStyles();
-  const [moreMenu, setMoreMenu] = useState(null);
-
-  const handleShowMoreMenu = (event) => {
-    setMoreMenu(event.currentTarget);
-  };
-
-  const handleHideMoreMenu = () => {
-    setMoreMenu(null);
-  };
 
   return (
     <NavbarBack link="/">
@@ -110,33 +99,6 @@ function Header({ user }) {
             )}
           />
         </ListItem>
-        {!isGroup && (
-        <>
-          <IconButton edge="end" color="inherit" aria-label="more" onClick={handleShowMoreMenu}>
-            <MoreVert />
-          </IconButton>
-          <Menu
-            id="more-menu"
-            anchorEl={moreMenu}
-            keepMounted
-            open={moreMenu !== null}
-            onClose={handleHideMoreMenu}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuItem>
-              <Delete style={{ marginRight: '5px' }} />
-              Remove Chat
-            </MenuItem>
-          </Menu>
-        </>
-        )}
       </>
     </NavbarBack>
   );
@@ -144,7 +106,6 @@ function Header({ user }) {
 
 Header.propTypes = {
   user: PropTypes.shape({
-    isGroup: PropTypes.bool,
     name: PropTypes.string.isRequired,
     picture: PropTypes.string.isRequired,
     status: PropTypes.string,
