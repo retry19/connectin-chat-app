@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import {
-  Avatar,
   Box,
   Button,
   Container,
@@ -8,8 +7,8 @@ import {
   makeStyles,
   Typography
 } from '@material-ui/core';
-import { Lock } from '@material-ui/icons';
 import { Copyright } from '../../components';
+import logo192 from '../../assets/images/logo192.png';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,10 +22,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
   },
   submit: {
     margin: theme.spacing(7, 0, 2),
@@ -44,9 +39,7 @@ export default function Login() {
     <Container component="main" maxWidth="xs" className={classes.container}>
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <Lock />
-        </Avatar>
+        <img src={logo192} alt="logo connect-in" />
         <Typography component="h1" variant="h5">
           Welcome
         </Typography>

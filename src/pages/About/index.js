@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { Email, Facebook, GitHub, Instagram, Twitter, WhatsApp } from '@material-ui/icons';
 import { NavbarBack } from '../../components';
+import photoMe from '../../assets/images/photo-me.jpg';
 
 const useStyles = makeStyles((theme) => ({
   backgroundGray: {
@@ -42,7 +43,7 @@ function About() {
         <Box className={classes.content}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Avatar alt="Reza Rachmanuddin" src="/" className={classes.avatar} />
+              <Avatar alt="Reza Rachmanuddin" src={photoMe} className={classes.avatar} />
             </Grid>
           </Grid>
           <Grid container spacing={3}>
