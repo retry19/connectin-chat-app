@@ -4,12 +4,7 @@ Merupakan web app untuk saling mengirim chat / pesan, baik secara publik maupun 
 
 ## Origin of the Name App
 
-```mermaid
-graph LR
-A(Hubungkan) --> B(Konekan)
-B --> C(Konekin)
-C --> D(Connect-in)
-```
+`Hubungkan` :arrow_right: `Konekan` :arrow_right: `Konekin` :arrow_right: `Connect-in` :tada:
 
 > Idenya buruk banget ya wkwkw :joy:
 
