@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import {
   Avatar,
@@ -227,10 +228,10 @@ function PrivateChat() {
       <Container maxWidth="xs" className={classes.container}>
         <Box className={classes.content}>
           {loading && <LinearProgress />}
-          {data?.messages?.map((d) => (
+          {data?.messages?.map((d, index) => (
             <>
-              {!checkSameDay(moment(d.created_at).format('L')) && <HeaderDate date={moment(d.created_at).format('LL')} />}
-              <BubbleChat key={d.id} message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} picture={toUser.isGroup && d.picture} />
+              {!checkSameDay(moment(d.created_at).format('L')) && <HeaderDate key={index} date={moment(d.created_at).format('LL')} />}
+              <BubbleChat key={d.id} message={d.message} time={moment(d.created_at).format('LT')} isMe={d.from_user_id === user.sub} picture={toUser.isGroup && d.from_user?.picture} />
             </>
           ))}
           <Box className={classes.chatFooter} id="box-form">

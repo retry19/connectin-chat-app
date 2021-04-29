@@ -27,6 +27,10 @@ export default {
         id
         created_at
         from_user_id
+        from_user {
+          id
+          picture
+        }
         message
         to_user_id
       }

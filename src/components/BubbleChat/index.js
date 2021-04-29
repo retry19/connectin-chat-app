@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import { Box, makeStyles } from '@material-ui/core';
+import { Avatar, Box, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
@@ -59,11 +59,12 @@ const useStyles = makeStyles((theme) => ({
   time: {}
 }));
 
-function BubbleChat({ key, message, time, isMe }) {
+function BubbleChat({ message, time, isMe, picture = null }) {
   const classes = useStyles();
 
   return (
-    <Box key={key} className={[classes.bubbleWrapper, (isMe ? classes.me : classes.you), 'bubble-chat']}>
+    <Box className={[classes.bubbleWrapper, (isMe ? classes.me : classes.you), 'bubble-chat']}>
+      {(!isMe && picture) && <Avatar src={picture} style={{ width: '35px', height: '35px', marginRight: '10px' }} />}
       <Box className={[
         classes.bubble,
         (isMe
@@ -80,10 +81,10 @@ function BubbleChat({ key, message, time, isMe }) {
 }
 
 BubbleChat.propTypes = {
-  key: PropTypes.string.isRequired,
   message: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   isMe: PropTypes.bool,
+  picture: PropTypes.string,
 };
 
 export default BubbleChat;
