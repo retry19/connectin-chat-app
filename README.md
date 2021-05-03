@@ -8,19 +8,51 @@ Merupakan web app untuk saling mengirim chat / pesan, baik secara publik maupun 
 
 > Idenya buruk banget ya wkwkw :joy:
 
-## Get Started
+## Tech Stack
 
-1. `git clone https://github.com/retry19/connectin-chat-app.git`
+- [React JS](https://reactjs.org/)
+- [Hasura](https://hasura.io/)
+- [Auth0](https://auth0.com/)
+- [Heroku](https://heroku.com/)
+- [Apollo GraphQL](https://apollographql.com)
+- [Material UI](https://material-ui.com/)
+- etc.
 
-2. `cd connectin-chat-app`
+## Getting Started
 
-3. `cp .env.example .env`
+1. Clone project
 
-4. Isi environment variables yang dibutuhkan pada .env
+    ```
+    git clone https://github.com/retry19/connectin-chat-app.git
+    cd connectin-chat-app
+    ````
 
-5. `yarn start` :rocket:
+2. Copy environment file, then fill it based on your config
+
+    ```
+    cp .env.example .env
+    ```
+    
+3. Install dependencies
+
+    ```
+    yarn install
+    ```
+    
+    or
+    
+    ```
+    yarn
+    ```
+    
+4. Run project :rocket:
+
+    ```
+    yarn start
+    ```
 
 ## About
 
 Reza Rachmanuddin
+
 :copyright: 2021 
